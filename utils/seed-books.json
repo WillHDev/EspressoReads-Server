@@ -1,0 +1,57 @@
+[
+    {
+      "_id": "111111111111111111111111",
+      "userId": "000000000000000000000001",
+      "title": "The Elephant in the Brain",
+      "subtitle":"Hidden Motives in Everday Life",
+      "description": "This is a Quake Book",
+      "Url":"http://bit.ly/2E7TvIU",
+      "tags": [{"name":"quake", "id":"000000000000000000000001"}],
+      "podcasts": [{
+          "name":"Waking Up with Sam Harris",
+          "episode":"81",
+          "segment": [{
+              "start":"8m 36s"
+          }]
+      }]
+ 
+      
+    },
+  
+    {
+      
+        "_id": "111111111111111111111112",
+        "userId": "000000000000000000000001",
+        "title": "Homo Deus",
+        "subtitle":"A Brief History of the Future",
+        "description": "This is a Quake Book",
+        "Url":"http://bit.ly/2E7TvIU",
+        "tags": [{"name":"quake", "id":"000000000000000000000001"}],
+        "podcasts": [{
+            "name":"Waking Up with Sam Harris",
+            "episode":"89",
+            "segment": [{
+                "start":"5m 36s"
+            }]
+        }]
+   
+    },
+  
+  
+    {
+        "_id": "111111111111111111111113",
+        "userId": "000000000000000000000001",
+        "title": "The Four Tendencies",
+        "subtitle":"A Theory of Personality",
+        "description": "This is a fundamental concept",
+        "Url":"http://bit.ly/2E7TvIU",
+        "tags": [{"name":"fundamental", "id":"000000000000000000000002"}],
+        "podcasts": [{
+            "name":"Happyness Project with Gretchen Rubin",
+            "episode":"62",
+            "segment": [{
+                "start":"3m 36s"
+            }]
+        }]
+    }
+  ]
