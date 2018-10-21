@@ -16,7 +16,7 @@ const jwt = require('jsonwebtoken');
 chai.use(chaihttp);
 const expect = chai.expect;
 
-
+console.log('secrets', JWT_EXPIRY, JWT_SECRET);
 describe('/API/Books endpoint', function(){
   let user;
   let token;
@@ -73,7 +73,7 @@ describe('/API/Books endpoint', function(){
         .then(([data, res]) => {
           res.body.forEach(function (item, i) {
             expect(item).to.be.a('object');
-            expect(item).to.include.all.keys('userId','id', 'title', 'description', 'subtitle', 'author', 'tags', 'podcasts', 'Url');
+            expect(item).to.include.all.keys('userId','id', 'title', 'description', 'image','subtitle', 'author', 'tags', 'podcasts', 'Url');
             expect(item.id).to.equal(data[i].id);
             expect(item.title).to.equal(data[i].title);
             expect(item.description).to.equal(data[i].description);
@@ -98,7 +98,7 @@ describe('/API/Books endpoint', function(){
           expect(res).to.have.status(200);
           expect(res).to.be.json;
           expect(res.body).to.be.a('object');
-          expect(res.body).to.have.all.keys('userId','id', 'title', 'description', 'subtitle', 'author', 'tags', 'podcasts', 'Url');
+          expect(res.body).to.have.all.keys('userId','id', 'title', 'image', 'description', 'subtitle', 'author', 'tags', 'podcasts', 'Url');
           expect(res.body.id).to.equal(data.id);
           expect(res.body.title).to.equal(data.title);
           expect(res.body.description).to.equal(data.description);
@@ -122,14 +122,14 @@ describe('/API/Books endpoint', function(){
     it('should create a new book and return it when given valid data', function(){
         const newBook = 
         { 
-              userId: "000000000000000000000001",
-              title: "Sapiens",
-              subtitle:"A Brief History of the Future",
               
+              title: "Sapiens III",
+              subtitle:"A Brief History of the Future 2",
+            image: "google.com",
             author:"Yuval Harari",
               description: "This is a Quake Book",
-              Url:"http://bit.ly/2E7TvIU",
-              tags: [{"name":"quake", "id":"000000000000000000000001"}],
+              Url: "google.com",
+              tags: [{name: "quake", id:"000000000000000000000001"}],
               podcasts: [{
                   name:"Waking Up with Sam Harris",
                   episode:"89",
@@ -150,7 +150,8 @@ describe('/API/Books endpoint', function(){
           expect(res).to.have.header('location');
           expect(res).to.be.json;
           expect(res.body).to.be.a('object');
-          expect(res.body).to.have.all.keys('userId','id', 'title', 'description', 'subtitle', 'author', 'tags', 'podcasts', 'Url');
+          console.log('res.body post', res.body);
+          expect(res.body).to.have.all.keys('userId','id', 'title', 'image', 'description', 'subtitle', 'author', 'tags', 'podcasts', 'Url');
           return Books.findOne({_id: res.body.id, userId: user.id});
         })
         .then(data => {
@@ -163,12 +164,13 @@ describe('/API/Books endpoint', function(){
     it('should return an error if missing title', function(){
       const newBook = { 
        
-        subtitle:"A Brief History of the Future",
+        subtitle: "A Brief History of the Future",
         
-      author:"Yuval Harari",
+      author: "Yuval Harari",
         description: "This is a Quake Book",
-        Url:"http://bit.ly/2E7TvIU",
-        tags: [{"name":"quake", "id":"000000000000000000000001"}],
+        image: "google.com",
+        Url: "http://bit.ly/2E7TvIU",
+        tags: [{name:"quake", id:"000000000000000000000001"}],
         podcasts: [{
             name:"Waking Up with Sam Harris",
             episode:"89",
@@ -196,14 +198,15 @@ describe('/API/Books endpoint', function(){
   describe('put/edit book', function(){
     it('should update the book when given valid data', function(){
       const updateBook =    { 
-       
+        userId: user.id,
         title: "Sapiens",
         subtitle:"A Brief History of the Future",
         
       author:"Yuval Harari",
         description: "This is a Quake Book",
         Url:"http://bit.ly/2E7TvIU",
-        tags: [{"name":"quake", "id":"000000000000000000000001"}],
+        image: "google.com",
+        tags: [{name:"quake", id:"000000000000000000000001"}],
         podcasts: [{
             name:"Waking Up with Sam Harris",
             episode:"89",
@@ -226,7 +229,7 @@ describe('/API/Books endpoint', function(){
           expect(res).to.have.status(200);
           expect(res).to.be.json;
           expect(res.body).to.be.a('object');
-          expect(res.body).to.have.all.keys('userId','id', 'title', 'description', 'subtitle', 'author', 'tags', 'podcasts', 'Url');
+          expect(res.body).to.have.all.keys('userId','id', 'title', 'description', 'image','subtitle', 'author', 'tags', 'podcasts', 'Url');
           expect(res.body.id).to.equal(data.id);
           expect(res.body.title).to.equal(updateBook.title);
           expect(res.body.description).to.equal(updateBook.description);
@@ -241,9 +244,10 @@ describe('/API/Books endpoint', function(){
         subtitle:"A Brief History of the Future",
         
       author:"Yuval Harari",
+      image: "google.com",
         description: "This is a Quake Book",
         Url:"http://bit.ly/2E7TvIU",
-        tags: [{"name":"quake", "id":"000000000000000000000001"}],
+        tags: [{name:"quake", id:"000000000000000000000001"}],
         podcasts: [{
             name:"Waking Up with Sam Harris",
             episode:"89",
@@ -262,6 +266,7 @@ describe('/API/Books endpoint', function(){
         })
         .then(res => {
           expect(res).to.have.status(400);
+          //console.log('json', typeof(res));
           expect(res).to.be.json;
           expect(res.body).to.be.a('object');
           expect(res.body.message).to.equal('Missing `title` in request body');
@@ -278,7 +283,8 @@ describe('/API/Books endpoint', function(){
         author:"Yuval Harari",
           description: "This is a Quake Book",
           Url:"http://bit.ly/2E7TvIU",
-          tags: [{"name":"quake", "id":"000000000000000000000001"}],
+          image: "google.com",
+          tags: [{name:"quake", id:"000000000000000000000001"}],
           podcasts: [{
               name:"Waking Up with Sam Harris",
               episode:"89",

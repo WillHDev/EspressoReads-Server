@@ -19,18 +19,6 @@ const app = express();
 
 
 
-app.use(
-  morgan(process.env.NODE_ENV === 'production' ? 'common' : 'dev', {
-    skip: (req, res) => process.env.NODE_ENV === 'test'
-  })
-);
-
-app.use(
-  cors({
-    origin: CLIENT_ORIGIN
-  })
-);
-
 app.use(express.json());
 passport.use(localStrategy);
 passport.use(jwtStrategy);
@@ -38,6 +26,39 @@ passport.use(jwtStrategy);
 app.use('/api/users', usersRouter);
 app.use('/api/login', authRouter);
 app.use('/api/books', booksRouter);
+
+
+
+//custom 404 not found handler
+app.use((req, res, next) => {
+  const err = new Error('Not Found');
+  err.status = 404;
+  next(err);
+});
+//Custom error handler
+app.use((err, req, res, next) => {
+  if (err.status) {
+    const errBody = Object.assign({}, err, { message: err.message });
+    res.status(err.status).json(errBody);
+  } else {
+    // console.error(err);
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+});
+
+
+// app.use(
+//   morgan(process.env.NODE_ENV === 'production' ? 'common' : 'dev', {
+//     skip: (req, res) => process.env.NODE_ENV === 'test'
+//   })
+// );
+
+app.use(
+  cors({
+    origin: CLIENT_ORIGIN
+  })
+);
+
 
 function runServer(port = PORT) {
   const server = app

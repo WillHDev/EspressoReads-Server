@@ -12,12 +12,12 @@ const jwtAuth = passport.authenticate('jwt', { session: false, failWithError: tr
 router.use(jsonParser);
 
 router.get('/', jwtAuth, (req, res, next) => {
-  console.log('Hit');
+
     const userId = req.user.id;
-    console.log('id', userId);
+    //console.log('id', userId);
 return Books.find({ userId })
 .then( books => {
-  console.log('Books',  books)
+  //console.log('Books',  books)
     res.json(books);
 })
 .catch(err => {
@@ -48,7 +48,7 @@ router.get('/:id', jwtAuth, (req, res, next) => {
   router.post('/', jwtAuth, (req, res, next) => {
    
     const userId = req.user.id; 
-    const {title, description, subtitle, author, URL, podcasts} = req.body;
+    const {title, description, subtitle, author, URL, podcasts, tags, image} = req.body;
     const newBook = {
       userId,
       title,
@@ -57,10 +57,11 @@ router.get('/:id', jwtAuth, (req, res, next) => {
       tags,
       author,
       URL,
-      podcasts
+      podcasts,
+      image
     };
   
-    if(!newEvent.title){
+    if(!newBook.title){
       const err = new Error('Missing `title` in request body');
       err.status = 400;
       return next(err);
@@ -86,7 +87,7 @@ router.get('/:id', jwtAuth, (req, res, next) => {
     
   
     const userId = req.user.id;
-    const {title, description, subtitle, author, URL, podcasts} = req.body;
+    const {title, description, subtitle, author, URL, podcasts, tags, image} = req.body;
     const updatedBook = {
       userId,
       title,
@@ -95,6 +96,7 @@ router.get('/:id', jwtAuth, (req, res, next) => {
       tags,
       author,
       URL,
+      image,
       podcasts
     };
     //validate id
@@ -103,7 +105,7 @@ router.get('/:id', jwtAuth, (req, res, next) => {
       err.status = 400;
       return next(err);
     }
-    if(!updatedEvent.title){
+    if(!updatedBook.title){
       const err = new Error('Missing `title` in request body');
       err.status = 400;
       return next(err);
