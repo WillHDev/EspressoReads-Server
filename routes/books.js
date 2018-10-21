@@ -12,10 +12,13 @@ const jwtAuth = passport.authenticate('jwt', { session: false, failWithError: tr
 router.use(jsonParser);
 
 router.get('/', jwtAuth, (req, res, next) => {
+  console.log('Hit');
     const userId = req.user.id;
+    console.log('id', userId);
 return Books.find({ userId })
 .then( books => {
-    res.json(books)
+  console.log('Books',  books)
+    res.json(books);
 })
 .catch(err => {
     next(err);
