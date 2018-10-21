@@ -8,7 +8,7 @@ module.exports = {
         process.env.DATABASE_URL || 'mongodb://WebUser:shadow8@ds013966.mlab.com:13966/headshuttle',
   TEST_DATABASE_URL:
         process.env.TEST_DATABASE_URL ||
-        'mongodb://localhost/thinkful-backend-test',
+        'mongodb://WebUser:shadow8@ds237563.mlab.com:37563/headshuttletest',
         JWT_EXPIRY: process.env.JWT_EXPIRY || '7d',
         JWT_SECRET: process.env.JWT_SECRET
   // DATABASE_URL:

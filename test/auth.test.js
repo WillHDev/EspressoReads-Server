@@ -9,8 +9,9 @@ const { TEST_DATABASE_URL, JWT_SECRET, JWT_EXPIRY } = require('../config');
 
 const User = require('../models/user-schema');
 const Books = require('../models/book-schema');
-const seedUsers = require('../seed-data/seed-users.json');
-const seedBooks = require('../seed-data/seed-books.json');
+const seedUsers = require('../utils/seed-users.json');
+const seedBooks = require('../utils/seed-books.json');
+
 
 chai.use(chaihttp);
 const expect = chai.expect;

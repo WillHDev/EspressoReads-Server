@@ -46,7 +46,7 @@ router.get('/:id', jwtAuth, (req, res, next) => {
    
     const userId = req.user.id; 
     const {title, description, subtitle, author, URL, podcasts} = req.body;
-    const newEvent = {
+    const newBook = {
       userId,
       title,
       subtitle,
@@ -63,12 +63,12 @@ router.get('/:id', jwtAuth, (req, res, next) => {
       return next(err);
     }
   
-    Event.create(newEvent)
-      .then( createdEvent => {
+   Books.create(newBook)
+      .then( createdBook => {
         res
-          .location(`${req.originalUrl}/${createdEvent.id}`)
+          .location(`${req.originalUrl}/${createdBook.id}`)
           .status(201)
-          .json(createdEvent);
+          .json(createdBook);
       })
       .catch(err => next(err));
   });
@@ -80,19 +80,19 @@ router.get('/:id', jwtAuth, (req, res, next) => {
     
     const {id} = req.params;
   
-    const {title, description, scheduleOptions, restaurantOptions, activityOptions, draft, location, locationCity} = req.body;
+    
   
     const userId = req.user.id;
-    const updatedEvent = {
+    const {title, description, subtitle, author, URL, podcasts} = req.body;
+    const updatedBook = {
       userId,
       title,
+      subtitle,
       description,
-      location,
-      locationCity,
-      scheduleOptions,
-      restaurantOptions,
-      activityOptions,
-      draft
+      tags,
+      author,
+      URL,
+      podcasts
     };
     //validate id
     if(!mongoose.Types.ObjectId.isValid(id)){
@@ -106,7 +106,7 @@ router.get('/:id', jwtAuth, (req, res, next) => {
       return next(err);
     }
   
-    Event.findOneAndUpdate({_id:id, userId}, updatedEvent, {new: true})
+   Books.findOneAndUpdate({_id:id, userId}, updatedBook, {new: true})
       .then(result => {
         if(result){
           res.json(result)
@@ -133,7 +133,7 @@ router.get('/:id', jwtAuth, (req, res, next) => {
       return next(err);
     }
   
-    Event.findOneAndRemove({_id:id, userId})
+   Books.findOneAndRemove({_id:id, userId})
       .then(() => {
         res.sendStatus(204).end();
       })

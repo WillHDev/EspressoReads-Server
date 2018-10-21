@@ -5,7 +5,7 @@ const bookSchema = new mongoose.Schema({
   title: {type: String, required: true},
   subtitle:  {type: String},
   tags: [ {name: String, id: String} ],
-  author: [ {name: String, id: String} ],
+  author:  {name: String, id: String},
   Url:String,
   podcasts: [{ 
       name: String,
