@@ -163,7 +163,6 @@ describe('/API/Books endpoint', function(){
 
     it('should return an error if missing title', function(){
       const newBook = { 
-       
         subtitle: "A Brief History of the Future",
         
       author: "Yuval Harari",
