@@ -16,7 +16,7 @@ const jwt = require('jsonwebtoken');
 chai.use(chaihttp);
 const expect = chai.expect;
 
-console.log('secrets', JWT_EXPIRY, JWT_SECRET);
+//console.log('secrets', JWT_EXPIRY, JWT_SECRET);
 describe('/API/Books endpoint', function(){
   let user;
   let token;
@@ -150,7 +150,7 @@ describe('/API/Books endpoint', function(){
           expect(res).to.have.header('location');
           expect(res).to.be.json;
           expect(res.body).to.be.a('object');
-          console.log('res.body post', res.body);
+          //console.log('res.body post', res.body);
           expect(res.body).to.have.all.keys('userId','id', 'title', 'image', 'description', 'subtitle', 'author', 'tags', 'podcasts', 'Url');
           return Books.findOne({_id: res.body.id, userId: user.id});
         })

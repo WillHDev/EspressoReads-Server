@@ -16,10 +16,21 @@ const  booksRouter  = require('./routes/books');
 const  usersRouter  = require('./routes/users');
 const app = express();
 
+app.use(
+  morgan(process.env.NODE_ENV === 'production' ? 'common' : 'dev', {
+    skip: (req, res) => process.env.NODE_ENV === 'test'
+  })
+);
 
+app.use(
+  cors({
+    origin: CLIENT_ORIGIN
+  })
+);
 
 
 app.use(express.json());
+
 passport.use(localStrategy);
 passport.use(jwtStrategy);
 
@@ -53,11 +64,7 @@ app.use((err, req, res, next) => {
 //   })
 // );
 
-app.use(
-  cors({
-    origin: CLIENT_ORIGIN
-  })
-);
+
 
 
 function runServer(port = PORT) {

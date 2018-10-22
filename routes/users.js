@@ -10,6 +10,7 @@ const jwtAuth = passport.authenticate('jwt', { session: false, failWithError: tr
 
 // ----------------Post to register a new user--------------------------
 router.post('/', jsonParser, (req, res) => {
+  console.log('Hit users router');
   const requiredFields = ['username', 'password'];
   const missingField = requiredFields.find(field => !(field in req.body));
 
@@ -132,6 +133,7 @@ router.get('/', jwtAuth, (req, res, next) => {
   const username = req.user.username;
   return User.findOne({username})
     .then(userData => {
+      console.log('user data', userData);
       return res.json(userData);
     })
     .catch(err => {
