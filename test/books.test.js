@@ -166,6 +166,7 @@ describe('/API/Books endpoint', function(){
        
         subtitle: "A Brief History of the Future",
         
+        
       author: "Yuval Harari",
         description: "This is a Quake Book",
         image: "google.com",
