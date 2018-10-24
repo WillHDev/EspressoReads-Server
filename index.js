@@ -12,8 +12,10 @@ const { PORT, CLIENT_ORIGIN } = require('./config');
 const { dbConnect } = require('./db-mongoose');
 // const {dbConnect} = require('./db-knex');
 const  authRouter  = require('./routes/auth');
-const  booksRouter  = require('./routes/books');
 const  usersRouter  = require('./routes/users');
+const  userBooksRouter  = require('./routes/userBooks');
+const  booksRouter  = require('./routes/books');
+
 const app = express();
 
 app.use(
@@ -36,8 +38,8 @@ passport.use(jwtStrategy);
 
 app.use('/api/users', usersRouter);
 app.use('/api/login', authRouter);
+app.use('/api/userbooks', userBooksRouter);
 app.use('/api/books', booksRouter);
-
 
 
 //custom 404 not found handler

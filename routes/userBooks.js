@@ -11,12 +11,11 @@ const jwtAuth = passport.authenticate('jwt', { session: false, failWithError: tr
 
 router.use(jsonParser);
 
-router.get('/', (req, res, next) => {
+router.get('/', jwtAuth, (req, res, next) => {
 
     const userId = req.user.id;
     //console.log('id', userId);
-    { userId }
-return Books.find()
+return Books.find({ userId })
 .then( books => {
   console.log('Books',  books)
     res.json(books);
@@ -46,7 +45,7 @@ router.get('/:id', jwtAuth, (req, res, next) => {
   
   
   //create new event
-  router.post('/',  (req, res, next) => {
+  router.post('/', jwtAuth, (req, res, next) => {
    
     const userId = req.user.id; 
     const {title, description, subtitle, author, URL, podcasts, tags, image} = req.body;
