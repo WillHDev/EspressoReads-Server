@@ -1,26 +1,29 @@
-const mongoose = require('mongoose');
-  //change to array
+const mongoose = require("mongoose");
+//change to array
 const bookSchema = new mongoose.Schema({
-  userId: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
-  title: {type: String, required: true},
-  subtitle:  {type: String},
+  userId: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+  title: { type: String, required: true },
+  subtitle: { type: String },
   description: String,
-  tags: [ {name: String, id: String} ],
-
+  tags: [{ name: String, id: String }],
+  nuggets: [{ type: mongoose.Schema.Types.ObjectId, ref: "Nugget" }],
   authors: String,
   image: String,
   Url: String,
-  podcasts: [{ 
+  podcasts: [
+    {
       name: String,
       episode: Number,
-      segment: [{ 
+      segment: [
+        {
           start: String
-      }]
-  }]
-  
+        }
+      ]
+    }
+  ]
 });
 
-bookSchema.set('toObject', {
+bookSchema.set("toObject", {
   virtuals: true,
   versionKey: false,
   transform: (doc, ret) => {
@@ -29,5 +32,4 @@ bookSchema.set('toObject', {
   }
 });
 
-
-module.exports = mongoose.model('Books', bookSchema);
+module.exports = mongoose.model("Books", bookSchema);

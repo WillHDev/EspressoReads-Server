@@ -1,26 +1,25 @@
-'use strict';
+"use strict";
 
-const express = require('express');
-const cors = require('cors');
-const morgan = require('morgan');
-const passport = require('passport');
-const { jwtStrategy } = require('./auth/strategies');
-const { localStrategy } = require('./auth/strategies');
+const express = require("express");
+const cors = require("cors");
+const morgan = require("morgan");
+const passport = require("passport");
+const { jwtStrategy } = require("./auth/strategies");
+const { localStrategy } = require("./auth/strategies");
 
-
-const { PORT, CLIENT_ORIGIN } = require('./config');
-const { dbConnect } = require('./db-mongoose');
+const { PORT, CLIENT_ORIGIN } = require("./config");
+const { dbConnect } = require("./db-mongoose");
 // const {dbConnect} = require('./db-knex');
-const  authRouter  = require('./routes/auth');
-const  usersRouter  = require('./routes/users');
-const  userBooksRouter  = require('./routes/userBooks');
-const  booksRouter  = require('./routes/books');
+const authRouter = require("./routes/auth");
+const usersRouter = require("./routes/users");
+const userBooksRouter = require("./routes/userBooks");
+const booksRouter = require("./routes/books");
 
 const app = express();
 
 app.use(
-  morgan(process.env.NODE_ENV === 'production' ? 'common' : 'dev', {
-    skip: (req, res) => process.env.NODE_ENV === 'test'
+  morgan(process.env.NODE_ENV === "production" ? "common" : "dev", {
+    skip: (req, res) => process.env.NODE_ENV === "test"
   })
 );
 
@@ -30,21 +29,19 @@ app.use(
   })
 );
 
-
 app.use(express.json());
 
 passport.use(localStrategy);
 passport.use(jwtStrategy);
 
-app.use('/api/users', usersRouter);
-app.use('/api/login', authRouter);
-app.use('/api/userbooks', userBooksRouter);
-app.use('/api/books', booksRouter);
-
+app.use("/api/users", usersRouter);
+app.use("/api/login", authRouter);
+app.use("/api/userbooks", userBooksRouter);
+app.use("/api/books", booksRouter);
 
 //custom 404 not found handler
 app.use((req, res, next) => {
-  const err = new Error('Not Found');
+  const err = new Error("Not Found");
   err.status = 404;
   next(err);
 });
@@ -54,11 +51,12 @@ app.use((err, req, res, next) => {
     const errBody = Object.assign({}, err, { message: err.message });
     res.status(err.status).json(errBody);
   } else {
-    // console.error(err);
-    res.status(500).json({ message: 'Internal Server Error' });
+    console.error(err);
+    res.status(500).json({
+      message: "Internal Server Error"
+    });
   }
 });
-
 
 // app.use(
 //   morgan(process.env.NODE_ENV === 'production' ? 'common' : 'dev', {
@@ -66,16 +64,13 @@ app.use((err, req, res, next) => {
 //   })
 // );
 
-
-
-
 function runServer(port = PORT) {
   const server = app
     .listen(port, () => {
       console.info(`App listening on port ${server.address().port}`);
     })
-    .on('error', err => {
-      console.error('Express failed to start');
+    .on("error", err => {
+      console.error("Express failed to start");
       console.error(err);
     });
 }
@@ -85,4 +80,4 @@ if (require.main === module) {
   runServer();
 }
 
-module.exports =  app ;
+module.exports = app;
