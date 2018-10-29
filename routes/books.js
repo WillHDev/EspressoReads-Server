@@ -16,14 +16,17 @@ const jwtAuth = passport.authenticate("jwt", {
 router.use(jsonParser);
 
 router.get("/", (req, res, next) => {
-  const userId = req.user.id;
+  //const userId = req.user.id;
   //console.log('id', userId);
-  {
-    userId;
-  }
+  // var q = Books.find({published: true}).sort({'date': -1}).limit(20);
+  // q.exec(function(err, posts) {
+  //      // `posts` will be of length 20
+  // });
+
   return Books.find()
+
     .then(books => {
-      console.log("Books", books);
+      console.log("Books from 'books endpoint'", books);
       res.json(books);
     })
     .catch(err => {
