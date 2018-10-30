@@ -10,6 +10,7 @@ const bookSchema = new mongoose.Schema({
   authors: String,
   image: String,
   Url: String,
+  votes: Number,
   podcasts: [
     {
       name: String,

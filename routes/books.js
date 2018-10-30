@@ -16,25 +16,11 @@ const jwtAuth = passport.authenticate("jwt", {
 router.use(jsonParser);
 
 router.get("/", (req, res, next) => {
-  //const userId = req.user.id;
-  //console.log('id', userId);
-  // var q = Books.find({published: true}).sort({'date': -1}).limit(20);
-  // q.exec(function(err, posts) {
-  //      // `posts` will be of length 20
-  // });
-
   return Books.find()
-
+    .populate("nuggets")
+    .sort({ vote: 1 })
     .then(books => {
-      console.log("Books from 'books endpoint'", books);
-      //Book.findById('asdads').populate('nuggets').then()
-      let booksWithNuggets = books.map(book => {
-        return Book.findById("asdads").populate("nuggets");
-      });
-      console.log("Books with nuggets", booksWithNuggets);
-      return booksWithNuggets;
-    })
-    .then(books => {
+      //console.log("Books JSON", books);
       res.json(books);
     })
     .catch(err => {
@@ -62,11 +48,11 @@ router.post("/", jwtAuth, (req, res, next) => {
   // console.log("req.body", req.body);
   const userId = req.user.id;
   //const userId = req.body.bookData.userId;
-  console.log("userid", userId);
+  //console.log("userid", userId);
 
   const { nuggetIds, bookData } = req.body;
   bookData.nuggets = nuggetIds;
-  console.log("BOOK DATA +++++", bookData);
+  //console.log("BOOK DATA +++++", bookData);
 
   Books.create(bookData)
     .then(createdBook => {
@@ -100,41 +86,24 @@ router.post("/", jwtAuth, (req, res, next) => {
 router.put("/:id", jwtAuth, (req, res, next) => {
   const { id } = req.params;
 
-  const userId = req.user.id;
-  const {
-    title,
-    description,
-    subtitle,
-    author,
-    URL,
-    podcasts,
-    tags,
-    image
-  } = req.body;
-  const updatedBook = {
-    userId,
-    title,
-    subtitle,
-    description,
-    tags,
-    author,
-    URL,
-    image,
-    podcasts
-  };
-  //validate id
+  const { voteAction } = req.body;
+
   if (!mongoose.Types.ObjectId.isValid(id)) {
     const err = new Error("The `id` is not valid");
     err.status = 400;
     return next(err);
   }
-  if (!updatedBook.title) {
-    const err = new Error("Missing `title` in request body");
-    err.status = 400;
-    return next(err);
+  function changeVote(voteAction) {
+    if (voteAction === "down") {
+      return Books.findByIdAndUpdate(id, { $inc: { votes: -1 } });
+      // .then(() => {
+      //   Books.update({ _id: id, votes: { $lt: 0 } }, { $set: { score: 0 } });
+      // });
+    } else {
+      return Books.findByIdAndUpdate(id, { $inc: { votes: 1 } });
+    }
   }
-
-  Books.findOneAndUpdate({ _id: id, userId }, updatedBook, { new: true })
+  changeVote(voteAction)
     .then(result => {
       if (result) {
         res.json(result).status(200);
@@ -146,6 +115,15 @@ router.put("/:id", jwtAuth, (req, res, next) => {
       next(err);
     });
 });
+//validate id
+
+// if (!updatedBook.title) {
+//   const err = new Error("Missing `title` in request body");
+//   err.status = 400;
+//   return next(err);
+// }
+
+// Books.findOneAndUpdate({ _id: id, userId }, updatedBook, { new: true })
 
 //delete event
 router.delete("/:id", jwtAuth, (req, res, next) => {
