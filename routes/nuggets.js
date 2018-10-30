@@ -50,28 +50,31 @@ router.use(jsonParser);
 //create new event
 router.post("/", (req, res, next) => {
   const { userId, nuggets } = req.body;
+
   let nuggetsArray = [];
-  //const array2 =
-  // nuggetIds = nuggets.map(nugget => {
-  //   return new Promise((resolve) => {
-  //     createNugget(nugget, resolve);
-  //   });
+
   function createNugget(nugget, resolve) {
-    return Nugget.create(nugget).then(nug => {
-      console.log("nug ID+++++", nug.id);
-      nuggetsArray.push(nug.id);
-      return nug.id;
-      console.log("in flight nuggets Array", nuggetsArray);
-    });
+    return Nugget.create(nugget)
+      .then(nug => {
+        nuggetsArray.push(nug.id);
+
+        return nug.id;
+      })
+      .catch(err => {
+        next(err);
+      });
   }
-  // nuggetsArray
-  console.log("final Array", nuggetsArray);
-  //res.json(nuggetsArray);
-  let nuggetIds = nuggets.map(nugget => createNugget(nugget));
-  Promise.all(nuggetIds).then(nuggetsArray => {
-    console.log("Nug array", nuggetsArray);
-    return res.json(nuggetsArray);
+  let nuggetIds = nuggets.map(nugget => {
+    return createNugget(nugget);
   });
+
+  Promise.all(nuggetIds)
+    .then(() => {
+      return res.json(nuggetsArray);
+    })
+    .catch(err => {
+      next(err);
+    });
 });
 module.exports = router;
 // .catch(err => {

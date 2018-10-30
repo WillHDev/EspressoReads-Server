@@ -1,15 +1,15 @@
 [
-    {
-      "_id": "000000000000000000000001",
-      "username": "partyHard1000",
-      "password": "$2y$10$ysEHg920uSxgr/DWrnrzVuF2.5AkseMOz8GNXvQ/sg2xw506sRkvi",
-      "email": "partyhardy@foo.com"
-    },
-  
-    {
-      "_id": "000000000000000000000002",
-      "username": "bobuser",
-      "password": "$2y$10$ysEHg920uSxgr/DWrnrzVuF2.5AkseMOz8GNXvQ/sg2xw506sRkvi",
-      "email": "greatGooglyMoogly@google.com"
-    }
-  ]
+  {
+    "_id": "000000000000000000000001",
+    "username": "gatsby",
+    "password": "$2y$10$ysEHg920uSxgr/DWrnrzVuF2.5AkseMOz8GNXvQ/sg2xw506sRkvi",
+    "email": "android@foo.com"
+  },
+
+  {
+    "_id": "000000000000000000000002",
+    "username": "bobuser",
+    "password": "$2y$10$ysEHg920uSxgr/DWrnrzVuF2.5AkseMOz8GNXvQ/sg2xw506sRkvi",
+    "email": "greatGooglyMoogly@google.com"
+  }
+]

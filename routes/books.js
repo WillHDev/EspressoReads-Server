@@ -27,13 +27,20 @@ router.get("/", (req, res, next) => {
 
     .then(books => {
       console.log("Books from 'books endpoint'", books);
+      //Book.findById('asdads').populate('nuggets').then()
+      let booksWithNuggets = books.map(book => {
+        return Book.findById("asdads").populate("nuggets");
+      });
+      console.log("Books with nuggets", booksWithNuggets);
+      return booksWithNuggets;
+    })
+    .then(books => {
       res.json(books);
     })
     .catch(err => {
       next(err);
     });
 });
-
 //get one event by id
 router.get("/:id", jwtAuth, (req, res, next) => {
   const id = req.params.id;
@@ -51,67 +58,17 @@ router.get("/:id", jwtAuth, (req, res, next) => {
 });
 
 //create new event
-router.post("/", (req, res, next) => {
-  console.log("req.body", req.body);
-  console.log("Hit books");
-  const userId = req.body.userId.id;
+router.post("/", jwtAuth, (req, res, next) => {
+  // console.log("req.body", req.body);
+  const userId = req.user.id;
+  //const userId = req.body.bookData.userId;
   console.log("userid", userId);
 
-  const {
-    title,
-    description,
-    subtitle,
-    authors,
-    URL,
-    podcasts,
-    tags,
-    image,
-    nuggets
-  } = req.body;
+  const { nuggetIds, bookData } = req.body;
+  bookData.nuggets = nuggetIds;
+  console.log("BOOK DATA +++++", bookData);
 
-  // nuggets = nuggets.map( nugget => {
-  //    return {name: nugget,
-  //   fromPage,
-  // toPage,
-  // description}
-  // });
-
-  // nuggets.forEach(() => {});
-  let nuggetsArray = [];
-
-  nuggets.forEach(nugget => {
-    Nugget.create(nugget)
-      .then(nug => {
-        nuggetsArray.push(nug._id);
-      })
-      .catch(err => {
-        console.error(err);
-        res.send(500);
-      });
-  });
-  console.log("Nuggets with ids?", nuggetsArray);
-
-  const newBook = {
-    userId,
-    nuggetsArray,
-    userId,
-    title,
-    subtitle,
-    description,
-    tags,
-    authors,
-    URL,
-    podcasts,
-    image
-  };
-  console.log("new book", newBook);
-  if (!newBook.title) {
-    const err = new Error("Missing `title` in request body");
-    err.status = 400;
-    return next(err);
-  }
-
-  Books.create(newBook)
+  Books.create(bookData)
     .then(createdBook => {
       res
         .location(`${req.originalUrl}/${createdBook.id}`)
@@ -119,6 +76,24 @@ router.post("/", (req, res, next) => {
         .json(createdBook);
     })
     .catch(err => next(err));
+  //Book.findById('asdads').populate('nuggets').then()
+
+  // let nuggetsArray = [];
+  // nuggetIds.map(nuggetId => {
+  //   console.log("nuggetid in book map", nuggetId);
+  //   let nugget = Nugget.findOne({ _id: nuggetId });
+  //   console.log("nugget in book map", nugget);
+  //   return nuggetsArray.push(nugget);
+  // });
+
+  //bookData.nugget
+
+  // console.log("new book", newBook);
+  // if (!newBook.title) {
+  //   const err = new Error("Missing `title` in request body");
+  //   err.status = 400;
+  //   return next(err);
+  // }
 });
 
 //edit event
