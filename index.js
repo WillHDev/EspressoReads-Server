@@ -41,7 +41,7 @@ app.use("/api/login", authRouter);
 app.use("/api/userbooks", userBooksRouter);
 app.use("/api/books", booksRouter);
 app.use("/api/nuggets", nuggetsRouter);
-app.use("/api/comments", nuggetsRouter);
+app.use("/api/comments", commentsRouter);
 
 //custom 404 not found handler
 app.use((req, res, next) => {

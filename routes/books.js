@@ -117,14 +117,28 @@ router.put("/:id", jwtAuth, (req, res, next) => {
       });
   } else {
     const bookId = req.params;
-    const { createdComment } = req.body;
-    Books.findbyIdandUpdate(
-      { _id: bookId },
-      { $push: { comments: createdComment } },
-      done
-    )
+    const createdCommentId = req.body.id;
+    console.log("createdCommentId", createdCommentId);
+    console.log("req.body", req.body);
+    //console.log("createdComment", createdComment);
+    //console.log("bookid", bookId);
+    //Books.update({ id: bookId }, { $push: { comments: createdCommentId } })
+    console.log("bookId", bookId);
+    return Books.find(bookId)
+      .then(book => {
+        console.log("book", book);
+        if (!book.comments) {
+          const array = [];
+          book.comments = array.push(createdCommentId);
+        } else {
+          book.comments.push(createdCommentId);
+        }
+        book.save();
+      })
       .then(result => {
         if (result) {
+          console.log("result", result);
+
           res.json(result);
         } else {
           next();

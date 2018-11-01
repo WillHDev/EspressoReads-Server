@@ -2,8 +2,8 @@ const mongoose = require("mongoose");
 //change to array
 const commentSchema = new mongoose.Schema({
   userId: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
-  text: { type: String, required: true /*, unique: true */ },
-  author: { type: String, required: true /*, unique: true */ }
+  text: { type: String /*, unique: true */ },
+  author: { type: String /*, unique: true */ }
 });
 
 commentSchema.set("toObject", {

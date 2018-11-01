@@ -17,24 +17,18 @@ const jwtAuth = passport.authenticate("jwt", {
 router.use(jsonParser);
 
 //create new event
-router.post("/:id", jwtAuth, (req, res, next) => {
+router.post("/", jwtAuth, (req, res, next) => {
   //req.user.id
-  const { book, comment } = req.body.commentData;
-  const bookId = req.params;
-  //   let newComment;
-  // Comment.create(comment)
-  // .then(createdComment => {
-  //     newComment = createdComment;
-  //   })
-  //   .catch(err => next(err));
-  // })
+  console.log("req.body", req.body);
+  const { book, comment } = req.body;
 
-  Comment.create(comment)
+  Comment.create({ text: comment })
     .then(createdComment => {
       res
         .status(201)
-        .json(createdComment)
-        .location(`${req.originalUrl}/${createdComment.id}`);
+
+        .location(`${req.originalUrl}/${createdComment.id}`)
+        .json(createdComment);
     })
     .catch(err => next(err));
 
@@ -61,22 +55,22 @@ router.post("/:id", jwtAuth, (req, res, next) => {
 
 module.exports = router;
 // console.log("req.body", req.body);
-const userId = req.user.id;
-//const userId = req.body.bookData.userId;
-//console.log("userid", userId);
+// const userId = req.user.id;
+// //const userId = req.body.bookData.userId;
+// //console.log("userid", userId);
 
-const { nuggetIds, bookData } = req.body;
-bookData.nuggets = nuggetIds;
-//console.log("BOOK DATA +++++", bookData);
+// const { nuggetIds, bookData } = req.body;
+// bookData.nuggets = nuggetIds;
+// //console.log("BOOK DATA +++++", bookData);
 
-Books.create(bookData)
-  .then(createdBook => {
-    res
-      .location(`${req.originalUrl}/${createdBook.id}`)
-      .status(201)
-      .json(createdBook);
-  })
-  .catch(err => next(err));
+// Books.create(bookData)
+//   .then(createdBook => {
+//     res
+//       .location(`${req.originalUrl}/${createdBook.id}`)
+//       .status(201)
+//       .json(createdBook);
+//   })
+//   .catch(err => next(err));
 //Book.findById('asdads').populate('nuggets').then()
 
 // let nuggetsArray = [];
