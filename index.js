@@ -15,6 +15,7 @@ const usersRouter = require("./routes/users");
 const userBooksRouter = require("./routes/userBooks");
 const booksRouter = require("./routes/books");
 const nuggetsRouter = require("./routes/nuggets");
+const commentsRouter = require("./routes/comments");
 
 const app = express();
 
@@ -40,6 +41,7 @@ app.use("/api/login", authRouter);
 app.use("/api/userbooks", userBooksRouter);
 app.use("/api/books", booksRouter);
 app.use("/api/nuggets", nuggetsRouter);
+app.use("/api/comments", nuggetsRouter);
 
 //custom 404 not found handler
 app.use((req, res, next) => {

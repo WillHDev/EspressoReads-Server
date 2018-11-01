@@ -7,6 +7,7 @@ const bookSchema = new mongoose.Schema({
   description: String,
   tags: [{ name: String, id: String }],
   nuggets: [{ type: mongoose.Schema.Types.ObjectId, ref: "Nugget" }],
+  comments: [{ type: mongoose.Schema.Types.ObjectId, ref: "Comment" }],
   authors: String,
   image: String,
   Url: String,

@@ -86,34 +86,58 @@ router.post("/", jwtAuth, (req, res, next) => {
 router.put("/:id", jwtAuth, (req, res, next) => {
   const { id } = req.params;
 
-  const { voteAction } = req.body;
+  if (req.body.voteAction) {
+    const { voteAction } = req.body;
 
-  if (!mongoose.Types.ObjectId.isValid(id)) {
-    const err = new Error("The `id` is not valid");
-    err.status = 400;
-    return next(err);
-  }
-  function changeVote(voteAction) {
-    if (voteAction === "down") {
-      return Books.findByIdAndUpdate(id, { $inc: { votes: -1 } });
-      // .then(() => {
-      //   Books.update({ _id: id, votes: { $lt: 0 } }, { $set: { score: 0 } });
-      // });
-    } else {
-      return Books.findByIdAndUpdate(id, { $inc: { votes: 1 } });
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      const err = new Error("The `id` is not valid");
+      err.status = 400;
+      return next(err);
     }
-  }
-  changeVote(voteAction)
-    .then(result => {
-      if (result) {
-        res.json(result).status(200);
+    function changeVote(voteAction) {
+      if (voteAction === "down") {
+        return Books.findByIdAndUpdate(id, { $inc: { votes: -1 } });
+        // .then(() => {
+        //   Books.update({ _id: id, votes: { $lt: 0 } }, { $set: { score: 0 } });
+        // });
       } else {
-        next();
+        return Books.findByIdAndUpdate(id, { $inc: { votes: 1 } });
       }
-    })
-    .catch(err => {
-      next(err);
-    });
+    }
+    changeVote(voteAction)
+      .then(result => {
+        if (result) {
+          res.json(result).status(200);
+        } else {
+          next();
+        }
+      })
+      .catch(err => {
+        next(err);
+      });
+  } else {
+    const bookId = req.params;
+    const { createdComment } = req.body;
+    Books.findbyIdandUpdate(
+      { _id: bookId },
+      { $push: { comments: createdComment } },
+      done
+    )
+      .then(result => {
+        if (result) {
+          res.json(result);
+        } else {
+          next();
+        }
+      })
+      .catch(err => {
+        // if (err.code === 11000) {
+        //   err = new Error("Tag name already exists");
+        //   err.status = 400;
+        // }
+        next(err);
+      });
+  }
 });
 //validate id
 
