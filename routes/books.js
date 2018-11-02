@@ -19,6 +19,7 @@ router.get("/", (req, res, next) => {
   return Books.find()
     .populate("nuggets")
     .sort({ vote: 1 })
+    .populate("comments")
     .then(books => {
       //console.log("Books JSON", books);
       res.json(books);
@@ -124,16 +125,20 @@ router.put("/:id", jwtAuth, (req, res, next) => {
     //console.log("bookid", bookId);
     //Books.update({ id: bookId }, { $push: { comments: createdCommentId } })
     console.log("bookId", bookId);
-    return Books.find(bookId)
+
+    return Books.findById({ _id: bookId.id })
       .then(book => {
-        console.log("book", book);
+        //console.log("book", book);
         if (!book.comments) {
+          // console.log("book if statement", book);
           const array = [];
           book.comments = array.push(createdCommentId);
         } else {
           book.comments.push(createdCommentId);
         }
-        book.save();
+        // console.log("book before save", book);
+        //book.save();
+        return book;
       })
       .then(result => {
         if (result) {

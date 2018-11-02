@@ -47,6 +47,8 @@ app.use("/api/comments", commentsRouter);
 app.use((req, res, next) => {
   const err = new Error("Not Found");
   err.status = 404;
+  console.log("err", err);
+
   next(err);
 });
 //Custom error handler
