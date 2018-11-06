@@ -32,7 +32,10 @@ router.get("/", (req, res, next) => {
 router.get("/:id", jwtAuth, (req, res, next) => {
   const id = req.params.id;
   return Books.findById(id)
+    .populate("nuggets")
+    .populate("comments")
     .then(result => {
+      console.log("result_______________________", result);
       if (result) {
         res.json(result);
       } else {
@@ -43,6 +46,12 @@ router.get("/:id", jwtAuth, (req, res, next) => {
       next(err);
     });
 });
+
+// path: "comments",
+// populate: {
+//   path: "author",
+//   model: "User"
+// }
 
 //create new event
 router.post("/", jwtAuth, (req, res, next) => {
@@ -129,6 +138,7 @@ router.put("/:id", jwtAuth, (req, res, next) => {
     return Books.findById({ _id: bookId.id })
       .then(book => {
         //console.log("book", book);
+        //let saveObj;
         if (!book.comments) {
           // console.log("book if statement", book);
           const array = [];
@@ -137,7 +147,7 @@ router.put("/:id", jwtAuth, (req, res, next) => {
           book.comments.push(createdCommentId);
         }
         // console.log("book before save", book);
-        //book.save();
+        book.save();
         return book;
       })
       .then(result => {

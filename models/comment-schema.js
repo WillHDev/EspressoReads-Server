@@ -1,9 +1,8 @@
 const mongoose = require("mongoose");
 //change to array
 const commentSchema = new mongoose.Schema({
-  userId: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
   text: { type: String /*, unique: true */ },
-  author: { type: String /*, unique: true */ }
+  author: { type: mongoose.Schema.Types.ObjectId, ref: "User" }
 });
 
 commentSchema.set("toObject", {
@@ -16,3 +15,5 @@ commentSchema.set("toObject", {
 });
 
 module.exports = mongoose.model("Comment", commentSchema);
+
+// Books.findById(id).populate("nuggets").populate("author")
