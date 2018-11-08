@@ -3,12 +3,13 @@ const express = require("express");
 const Books = require("../models/book-schema");
 const Nugget = require("../models/nugget-schema");
 const Comment = require("../models/comment-schema");
+const User = require("../models/user-schema");
 const router = express.Router();
 const passport = require("passport");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const jsonParser = bodyParser.json();
-const User = require("../models/user-schema");
+
 const jwtAuth = passport.authenticate("jwt", {
   session: false,
   failWithError: true
@@ -20,18 +21,26 @@ router.use(jsonParser);
 router.post("/", jwtAuth, (req, res, next) => {
   //req.user.id
   console.log("req.body", req.body);
-  const { book, comment } = req.body;
-
-  Comment.create({ text: comment })
+  const { book, comment, userId } = req.body;
+  User.findById(userId)
+    .then(user => {
+      return user.username;
+    })
+    .then(username => {
+      return Comment.create({
+        text: comment,
+        author: username
+      });
+    })
     .then(createdComment => {
+      console.log("createdComment>>>>>>>>>>>>>>>", createdComment);
       res
         .status(201)
 
-        .location(`${req.originalUrl}/${createdComment.id}`)
         .json(createdComment);
     })
     .catch(err => next(err));
-
+  //.location(`${req.originalUrl}/${createdComment.id}`)
   //   Books.findbyIdandUpdate(
   //     { _id: bookId },
   //     { $push: { comments: comment } },

@@ -50,6 +50,7 @@ router.use(jsonParser);
 //create new event
 router.post("/", (req, res, next) => {
   const { userId, nuggets } = req.body;
+  console.log("nuggets%%%&&&", nuggets);
 
   let nuggetsArray = [];
 

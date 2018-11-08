@@ -1,9 +1,11 @@
 const mongoose = require("mongoose");
 //change to array
 const commentSchema = new mongoose.Schema({
-  text: { type: String /*, unique: true */ },
-  author: { type: mongoose.Schema.Types.ObjectId, ref: "User" }
+  text: { type: String },
+  author: { type: String }
 });
+
+//{ type: mongoose.Schema.Types.ObjectId, ref: "User" }
 
 commentSchema.set("toObject", {
   virtuals: true,
