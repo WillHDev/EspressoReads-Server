@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 //change to array
 const nuggetSchema = new mongoose.Schema({
   userId: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
-  name: { type: String, required: true /*, unique: true */ },
+
   fromPage: { type: String, required: true /*, unique: true */ },
   toPage: { type: String, required: true /*, unique: true */ },
   description: { type: String }
