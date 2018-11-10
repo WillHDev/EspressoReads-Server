@@ -18,7 +18,7 @@ userSchema.set("toObject", {
     delete ret.password;
   }
 });
-//
+
 userSchema.methods.validatePassword = function(password) {
   return bcrypt.compare(password, this.password);
 };
