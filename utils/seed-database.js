@@ -4,11 +4,14 @@ const mongoose = require("mongoose");
 const { DATABASE_URL } = require("../config");
 const User = require("../models/user-schema");
 const Books = require("../models/book-schema");
-
+const Nuggets = require("../models/nugget-schema");
 const seedUsers = require("./seed-users.json");
 const seedBooks = require("./seed-books.json");
 
 console.log("Connecting to MongoDB");
+
+// Nuggets.insertMany(seedNuggets),
+// Nuggets.createIndexes()
 
 mongoose
   .connect(DATABASE_URL)
@@ -20,6 +23,7 @@ mongoose
     return Promise.all([
       User.insertMany(seedUsers),
       User.createIndexes(),
+
       Books.insertMany(seedBooks),
       Books.createIndexes()
     ]);

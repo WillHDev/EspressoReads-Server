@@ -16,10 +16,9 @@ router.use(jsonParser);
 
 router.get("/", jwtAuth, (req, res, next) => {
   const userId = req.user.id;
-  console.log("id", userId);
+
   return Books.find({ userId })
     .then(books => {
-      console.log("userBooks", books);
       res.json(books);
     })
     .catch(err => {

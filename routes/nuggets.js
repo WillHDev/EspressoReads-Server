@@ -50,7 +50,6 @@ router.use(jsonParser);
 //create new event
 router.post("/", (req, res, next) => {
   const { userId, nuggets } = req.body;
-  console.log("nuggets%%%&&&", nuggets);
 
   let nuggetsArray = [];
 
@@ -78,93 +77,3 @@ router.post("/", (req, res, next) => {
     });
 });
 module.exports = router;
-// .catch(err => {
-//   console.error(err);
-//   res.send(500);
-// });
-// res.json({ nuggetsArray });
-// console.log("Nuggets with ids?", nuggetsArray);
-//   console.log("new book", newBook);
-//   if (!newBook.title) {
-//     const err = new Error("Missing `title` in request body");
-//     err.status = 400;
-//     return next(err);
-//   }
-//   Books.create(newBook)
-//     .then(createdBook => {
-//       res
-//         .location(`${req.originalUrl}/${createdBook.id}`)
-//         .status(201)
-//         .json(createdBook);
-//     })
-//     .catch(err => next(err));
-
-// //edit event
-// router.put("/:id", jwtAuth, (req, res, next) => {
-//   const { id } = req.params;
-
-//   const userId = req.user.id;
-//   const {
-//     title,
-//     description,
-//     subtitle,
-//     author,
-//     URL,
-//     podcasts,
-//     tags,
-//     image
-//   } = req.body;
-//   const updatedBook = {
-//     userId,
-//     title,
-//     subtitle,
-//     description,
-//     tags,
-//     author,
-//     URL,
-//     image,
-//     podcasts
-//   };
-//   //validate id
-//   if (!mongoose.Types.ObjectId.isValid(id)) {
-//     const err = new Error("The `id` is not valid");
-//     err.status = 400;
-//     return next(err);
-//   }
-//   if (!updatedBook.title) {
-//     const err = new Error("Missing `title` in request body");
-//     err.status = 400;
-//     return next(err);
-//   }
-
-//   Books.findOneAndUpdate({ _id: id, userId }, updatedBook, { new: true })
-//     .then(result => {
-//       if (result) {
-//         res.json(result).status(200);
-//       } else {
-//         next();
-//       }
-//     })
-//     .catch(err => {
-//       next(err);
-//     });
-// });
-
-// //delete event
-// router.delete("/:id", jwtAuth, (req, res, next) => {
-//   const { id } = req.params;
-//   const userId = req.user.id;
-//   if (!mongoose.Types.ObjectId.isValid(id)) {
-//     const err = new Error("The `id` is not valid");
-//     err.status = 400;
-//     return next(err);
-//   }
-
-//   Books.findOneAndRemove({ _id: id, userId })
-//     .then(() => {
-//       res.sendStatus(204).end();
-//     })
-//     .catch(err => {
-//       next(err);
-//     });
-// });
